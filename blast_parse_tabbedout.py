@@ -12,18 +12,22 @@ e_thresh = 1e-3
 def print_record(align):
        divergence = round(1-(float(align[0].hsps[0].identities)/float(len(align[0].hsps[0].query))), 3)
        print record.query+"\t"+str(align[0].title[4:6]).rstrip()+"\t"+str(align[0].hsps[0].sbjct_start)+"\t"+str(align[0].hsps[0].sbjct_end)+"\t"+"\t"+str(align[0].hsps[0].identities)+"\t"+str(len(align[0].hsps[0].query))+"\t"+str(divergence)+"\t"+align[0].hsps[0].sbjct
-       
-#code to check for multiple alignments and multiple hits to the same chromosome
+#code to check for multiple alignments and multiple hits to the same chromosome       
+def best_hit(align):
+	if len(align[0].hsps) == 1 or align[0].hsps[0].expect != align[0].hsps[1].expect: #check if a best hit exists for the top alignment	
+		hit_length = align[0].hsps[0].sbjct_end - align[0].hsps[0].sbjct_start + 1
+		if hit_length >= (0.9 * record.query_letters): #only print hits that cover at least 90% of the query sequence
+			print_record(align)
+
+#code to run through file of blast records
 if blastfile.endswith('.xml'):
    for record in NCBIXML.parse(open(blastfile)):
        align = record.alignments
        if align[0].hsps[0].expect < e_thresh: #check that there is a decent top hit
           if len(align) > 1: #if there are hits to multiple chromosomes
              if align[0].hsps[0].expect != align[1].hsps[0].expect: #check that a best hit exists 
-                if len(align[0].hsps) ==1 or align[0].hsps[0].expect != align[0].hsps[1].expect: #if a best hit exists on the top alignment then print
-                   print_record(align)
-          else: #if there is only one alignment, check for multiple hits to that chromosome
-                if len(align[0].hsps) == 1 or align[0].hsps[0].expect != align[0].hsps[1].expect: #if a best hit exists then print
-                   print_record(align)
+                best_hit(align)	
+	     else: #if there is only one alignment, check that a best hit exists
+                   best_hit(align)
 else:
     print "input not an xml file"
