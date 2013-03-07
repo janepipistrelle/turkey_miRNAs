@@ -19,9 +19,10 @@ def print_record(align):
 	divergence = round(1-(float(align[0].hsps[0].identities)/float(len(align[0].hsps[0].query))), 3)
 	title = align[0].title.split(":")[0].lstrip("lcl|").rstrip("\sdna")
 	subject = str(align[0].hsps[0].sbjct)
+	print "%r\t%r\t%r\n" % (record.query, align[0].hsps[0].query_start, align[0].hsps[0].query_end)
 	if align[0].hsps[0].query_start > align[0].hsps[0].query_end:
 		subject= reverse_complement(subject)
-	print record.query+"\t"+title+"\t"+str(align[0].hsps[0].sbjct_start)+"\t"+str(align[0].hsps[0].sbjct_end)+"\t"+"\t"+str(align[0].hsps[0].identities)+"\t"+str(len(align[0].hsps[0].query))+"\t"+str(divergence)+"\t"+subject
+	#print record.query+"\t"+title+"\t"+str(align[0].hsps[0].sbjct_start)+"\t"+str(align[0].hsps[0].sbjct_end)+"\t"+"\t"+str(align[0].hsps[0].identities)+"\t"+str(len(align[0].hsps[0].query))+"\t"+str(divergence)+"\t"+subject
 
 #code to check for multiple alignments and multiple hits to the same chromosome       
 def best_hit(align):

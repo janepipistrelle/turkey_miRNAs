@@ -1,0 +1,4 @@
+locus	sp1/2	sp2/3
+test1_2_3_same	0.0	0.0
+test1_2_same	0.0	0.564
+test_1_2_3_diff	0.381	0.405
